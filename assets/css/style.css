@@ -1,14 +1,23 @@
+:root {
+    --white: #fefcfb;
+    --ligth: #e9faff;
+    --turkuaz: #1282a2;
+    --light_blue: #034078;
+    --blue: #001f54;
+    --green: #042a2b;
+    --light_orange: #ef7b45;
+    --red: #d84727;
+    --black: #0a1128;
+    --border: #888888;
+    --shadow: rgba(0,0,0,0.2);
+}
+
 * {
     margin:0;
     padding:0;box-sizing:border-box;
 }
-.container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    background-color: rgb(247, 247, 247);
-
-
+body{
+    background-color: var(--white);
 }
 nav {
     display: flex;
@@ -23,7 +32,7 @@ hr {
     text-align: center;
     font-size: 2rem;
     font-weight: bold;
-    color: orange;
+    color: var(--red);
     transition-duration: 0.5s;
     transition-property: letter-spacing;
 }
@@ -31,7 +40,7 @@ hr {
     letter-spacing: 0.5rem;
 }
 .basket-button {
-    color: orange;
+    color: var(--light_orange);
     font-size: 1.5rem;
     padding: 0.5rem 5rem;
     border-radius: 0.2rem;
@@ -41,11 +50,19 @@ hr {
     transition-property: background-color, color, letter-spacing, font-weight, box-shadow;
 }
 .basket-button:hover {
-    background-color: orange;
-    color: whitesmoke;
+    background-color: var(--light_orange);
+    color: var(--white);
     letter-spacing: 0.05rem;
     font-weight: bold;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    background-color: var(--white);
+
+
 }
 .card {
     border: 0.2px solid #888888;
@@ -55,15 +72,15 @@ hr {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #373737;
+    color: var(--green);
     margin: 1rem;
     padding: 1rem;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 var(--shadow);
     transition-duration: 0.5s;
     transition-property: box-shadow;
 }
 .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 var(--shadow);
   }
 .img-container {
     display: flex;
@@ -90,7 +107,7 @@ hr {
 }
 .price-sold-out {
     color: #4b4b4b;
-    text-decoration: line-through red;
+    text-decoration: line-through var(--red);
 }
 .sale{
     display: grid;
@@ -98,7 +115,7 @@ hr {
     align-items: center;
 }
 .sold-out {
-    color: red;
+    color: var(--red);
     font-size: 2rem;
     font-weight: bold;
 }
@@ -117,8 +134,8 @@ hr {
 .count-button {
     display: block;
     font-size: 1.2rem;
-    color: #373737;
-    background-color: whitesmoke;
+    color: var(--blue);
+    background-color: var(--ligth);
     border: 0.2px solid #888888;
     border-radius: 0.2rem;
     width: 2rem;
@@ -128,19 +145,19 @@ hr {
     transition-property: background-color, color, font-size, font-weight, box-shadow;
 }
 .count-button:hover {
-    background-color: rgb(52, 52, 255);
-    color: whitesmoke;
+    background-color: var(--light_blue);
+    color: var(--ligth);
     font-weight: bold;
     font-size: 1.4rem;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
-.buy-button {
+.add-button {
     margin: 0.8rem auto;
     padding: 0.5rem;
     font-size: 1.2rem;
     font-weight: 500;
-    background-color: green;
-    color: whitesmoke;
+    background-color: var(--light_blue);
+    color: var(--white);
     border: 0.2px solid #888888;
     border-radius: 0.2rem;
     width: 100%;
@@ -148,13 +165,53 @@ hr {
     transition-duration: 0.5s;
     transition-property: background-color, letter-spacing, font-weight, box-shadow;
 }
-.buy-button:hover {
-    background-color: rgb(11, 184, 11);
+.add-button:hover {
+    background-color: var(--blue);
     letter-spacing: 0.05rem;
     font-weight: bold;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
-
+.basket {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1rem;
+    padding: 5rem;
+}
+.basket-card {
+    grid-column: 1fr;
+    text-align: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    border: 0.2px solid #888888;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    padding: 1rem;
+}
+.basket-img-wparrer {
+    grid-column: 1fr;
+    height:7rem;
+    width: 5rem;
+}
+.basket-img-wparrer img {
+    width: 100%;
+    height: 100%;
+}
+.title {
+    grid-column: 1fr;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.buy-product {
+    grid-column: 1fr;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.product-title {
+    font-size:1.3rem;
+    font-weight: bold;
+}
 .attribution { 
     font-size: 0.8rem; 
     text-align: center; 

@@ -190,6 +190,7 @@ const data = [
   },
 ];
 
+const basket = [];
 const container = document.querySelector(".container");
 
 for (let i = 0; i < data.length; i++) {
@@ -233,31 +234,56 @@ for (let i = 0; i < data.length; i++) {
 
     const countContainer = document.createElement("span");
     countContainer.textContent = 1;
+    let count = parseInt(countContainer.textContent);
 
     const minusSpan = document.createElement("button");
     minusSpan.setAttribute("class", "count-button");
     minusSpan.textContent = "-";
     minusSpan.addEventListener("click", function (e) {
-      count = countContainer.textContent;
-      console.log(count);
+      if (count > 1) {
+        count -= 1;
+        countContainer.textContent = count;
+      } else {
+        alert("You can't order less than one.");
+      }
     });
 
     const plusSpan = document.createElement("button");
     plusSpan.setAttribute("class", "count-button");
     plusSpan.textContent = "+";
+    plusSpan.addEventListener("click", function (e) {
+      if (count < 10) {
+        count += 1;
+        countContainer.textContent = count;
+      } else {
+        alert("This Product has been alredy sold out.");
+      }
+    });
 
     firstCol.append(minusSpan);
     firstCol.append(countContainer);
     firstCol.append(plusSpan);
     saleBox.append(firstCol);
 
-    const buy = document.createElement("button");
-    buy.textContent = "add to basket";
-    buy.setAttribute("class", "buy-button");
-    buy.setAttribute("id", data[i].id);
-    buy.addEventListener("click", function (e) {});
-
-    saleBox.append(buy);
+    const addBtn = document.createElement("button");
+    addBtn.textContent = "add to basket";
+    addBtn.setAttribute("class", "add-button");
+    addBtn.setAttribute("id", data[i].id);
+    addBtn.addEventListener("click", function (e) {
+      const product = basket.find((item) => item.id === e.target.id);
+      if (product) {
+        product.count = count;
+      } else {
+        basket.push({
+          id: e.target.id,
+          count,
+        });
+      }
+      alert(`${data[i].title} added to your successfully`);
+      countContainer.textContent = 1;
+      console.log(basket);
+    });
+    saleBox.append(addBtn);
     card.append(saleBox);
   } else {
     const soldOut = document.createElement("div");
@@ -268,3 +294,61 @@ for (let i = 0; i < data.length; i++) {
 
   container.append(card);
 }
+
+const myBusketBtn = document.querySelector(".basket-button");
+const basketDiv = document.querySelector(".basket");
+myBusketBtn.addEventListener("click", () => {
+  container.innerHTML = "";
+  basket.map((item) => {
+    let product = "";
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === item.id) {
+        product = data[i];
+      }
+    }
+    console.log(product);
+    const card = document.createElement("div");
+    card.setAttribute("class", "basket-card");
+
+    const imgWrapper = document.createElement("div");
+    imgWrapper.setAttribute("class", "basket-img-wparrer");
+    const img = document.createElement("img");
+    img.setAttribute("src", product.image);
+    imgWrapper.append(img);
+    card.append(imgWrapper);
+
+    const title = document.createElement("div");
+    title.setAttribute("class", "title");
+
+    productName = document.createElement("div");
+    productName.setAttribute("class", "product-title");
+    productName.textContent = product.title;
+    title.append(productName);
+
+    const cancelButton = document.createElement("button");
+    cancelButton.setAttribute("class", "cancel");
+    cancelButton.textContent = "cancel";
+    title.append(cancelButton);
+    card.append(title);
+
+    const buyDiv = document.createElement("div");
+
+    const productPrice = document.createElement("div");
+    productPrice.setAttribute("class", "basket-prise");
+    productPrice.textContent = `Price: ${product.price}`;
+    buyDiv.append(productPrice);
+
+    const count = document.createElement("div");
+    count.setAttribute("class", "count");
+    count.textContent = item.count;
+    buyDiv.append(count);
+
+    const buyBtn = document.createElement("button");
+    buyBtn.setAttribute("class", "buy");
+    buyBtn.textContent = "buy";
+    buyDiv.append(buyBtn);
+    card.append(buyDiv);
+
+    basketDiv.append(card);
+  });
+});
