@@ -315,7 +315,7 @@ function emptyBasket() {
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
-  basketDiv.textContent = "";
+  table.innerHTML = '<li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li>'
 
 
   basket.map((item) => {
