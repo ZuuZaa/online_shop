@@ -295,6 +295,8 @@ for (let i = 0; i < data.length; i++) {
   container.append(card);
 }
 
+const headerTitle = document.querySelector("title");
+console.log(headerTitle)
 const basketBtn = document.querySelector(".basket-button");
 const basketDiv = document.querySelector(".basket");
 const message = document.querySelector(".message-container");
@@ -312,7 +314,7 @@ function emptyBasket() {
 
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
-  console.log(basket)
+  headerTitle.textContent = "My Shop | Basket";
 
 
   basket.map((item) => {
@@ -379,4 +381,5 @@ logo.addEventListener("click", () =>{
   container.style["display"] = "grid";
   basketDiv.style["display"] = "none";
   message.style["display"] = "none";
+  headerTitle.textContent = "My Shop | Products";
 })
