@@ -315,6 +315,7 @@ function emptyBasket() {
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
+  basketDiv.textContent = "";
 
 
   basket.map((item) => {
