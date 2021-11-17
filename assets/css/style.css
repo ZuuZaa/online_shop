@@ -20,7 +20,7 @@
 body {
   background-color: var(--white);
 }
- /* ----- Header ------- */
+/* ----- Header ------- */
 nav {
   display: flex;
   justify-content: space-between;
@@ -81,7 +81,7 @@ hr {
     padding: 3rem;
   }
 }
- /* ------- Products -------- */
+/* ------- Products -------- */
 .product-container {
   background-color: var(--white);
 }
@@ -193,7 +193,7 @@ hr {
   box-shadow: 0 8px 16px 0 var(--shadow);
 }
 
- /* ---- Basket ------ */
+/* ---- Basket ------ */
 .basket {
   display: none;
   max-width: 1000px;
@@ -204,7 +204,7 @@ hr {
   list-style: none;
 }
 
-@media (max-width: 767px){
+@media (max-width: 767px) {
   .basket {
     padding: 1rem;
   }
@@ -213,10 +213,10 @@ hr {
   }
   .col {
     flex-basis: 100%;
-    padding: .5rem;
+    padding: 0.5rem;
   }
 }
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .basket {
     padding: 2rem 3rem;
   }
@@ -225,7 +225,7 @@ hr {
   }
   .responsive-table li {
     display: flex;
-  justify-content: space-between;
+    justify-content: space-between;
   }
   .col-1 {
     flex-basis: 40%;
@@ -254,7 +254,7 @@ hr {
   box-shadow: 0px 0px 9px 0px var(--shadow);
 }
 .responsive-table li {
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   padding: 25px 30px;
   margin-bottom: 25px;
 }
@@ -264,7 +264,7 @@ hr {
 .buy-btn:hover {
   color: var(--border);
   font-weight: bold;
-  letter-spacing: .3rem;
+  letter-spacing: 0.3rem;
 }
 .cancel-btn {
   color: var(--red);
@@ -272,11 +272,33 @@ hr {
 .cancel-btn:hover {
   color: var(--light_orange);
   font-weight: bold;
-  letter-spacing: .3rem;
+  letter-spacing: 0.3rem;
+}
+
+/* ----- Message ----- */
+.message-container {
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.message {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--green);
+  margin: 5rem;
+  padding: 5rem;
+  border-radius: 0.2rem;
+  border: 0.2px solid var(--border);
+  box-shadow: 0 4px 8px 0 var(--shadow);
+}
+@media (max-width: 767px) {
+  .message {
+    font-size: 1rem;
+  }
 }
 
 /* ---- Footer ----- */
-@media (max-width: 767px){
+@media (max-width: 767px) {
   .attribution span {
     display: block;
   }

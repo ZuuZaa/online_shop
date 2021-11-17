@@ -192,9 +192,7 @@ const data = [
 
 const basket = [];
 
-const content = document.querySelector(".content");
-const container = document.createElement("div");
-container.setAttribute("class", "product-container");
+const container = document.querySelector(".product-container");
 
 for (let i = 0; i < data.length; i++) {
   const card = document.createElement("div");
@@ -296,19 +294,30 @@ for (let i = 0; i < data.length; i++) {
   }
   container.append(card);
 }
-content.append(container);
 
 const basketBtn = document.querySelector(".basket-button");
 const basketDiv = document.querySelector(".basket");
+const message = document.querySelector(".message-container");
 const table = document.querySelector(".responsive-table");
-console.log(table);
+
+function emptyBasket() {
+  if(basket.length>0) {
+    basketDiv.style["display"] = "block";
+    message.style["display"] = "none";
+  }else{
+    basketDiv.style["display"] = "none";
+    message.style["display"] = "flex";
+  }
+}
 
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
-  basketDiv.style["display"] = "block";
+  console.log(basket)
+
+
   basket.map((item) => {
-    const product = data.find(dataItem => dataItem.id == item.id);
-    console.log(product.title)
+    const product = data.find((dataItem) => dataItem.id == item.id);
+    console.log(product.title);
 
     const tableRow = document.createElement("li");
     tableRow.setAttribute("class", "table-row");
@@ -323,7 +332,7 @@ basketBtn.addEventListener("click", () => {
     const priceDiv = document.createElement("div");
     priceDiv.setAttribute("data-label", "Price");
     priceDiv.setAttribute("class", "col col-2");
-    priceDiv.textContent =`${product.price} $`;
+    priceDiv.textContent = `${product.price} $`;
     tableRow.append(priceDiv);
 
     const countDiv = document.createElement("div");
@@ -341,6 +350,7 @@ basketBtn.addEventListener("click", () => {
       alert(`You Bought ${item.count} ${product.title}.`);
       const removingRow = document.getElementById(item.id);
       removingRow.style["display"] = "none";
+      emptyBasket();
     });
     tableRow.append(buyBtn);
 
@@ -353,10 +363,20 @@ basketBtn.addEventListener("click", () => {
       alert(`${product.title} removed from your basket.`);
       const removingRow = document.getElementById(item.id);
       removingRow.style["display"] = "none";
+      emptyBasket();
     });
     tableRow.append(cancelBtn);
 
     table.append(tableRow);
-
   });
+
+  emptyBasket();
+
 });
+
+const logo = document.querySelector(".logo");
+logo.addEventListener("click", () =>{
+  container.style["display"] = "grid";
+  basketDiv.style["display"] = "none";
+  message.style["display"] = "none";
+})
