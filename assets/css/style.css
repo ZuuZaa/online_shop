@@ -40,6 +40,7 @@ hr {
 }
 .logo:hover {
   letter-spacing: 0.5rem;
+  color: var(--light_orange);
 }
 .basket-button {
   color: var(--light_orange);
