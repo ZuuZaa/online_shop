@@ -191,7 +191,10 @@ const data = [
 ];
 
 const basket = [];
-const container = document.querySelector(".container");
+
+const content = document.querySelector(".content");
+const container = document.createElement("div");
+container.setAttribute("class", "product-container");
 
 for (let i = 0; i < data.length; i++) {
   const card = document.createElement("div");
@@ -219,7 +222,7 @@ for (let i = 0; i < data.length; i++) {
   } else {
     price.setAttribute("class", "price-sold-out");
   }
-  price.textContent = "Price: " + data[i].price;
+  price.textContent = `Price: ${data[i].price} $`;
   card.append(price);
 
   if (data[i].stock) {
@@ -291,64 +294,69 @@ for (let i = 0; i < data.length; i++) {
     soldOut.textContent = "Sold Out";
     card.append(soldOut);
   }
-
   container.append(card);
 }
+content.append(container);
 
-const myBusketBtn = document.querySelector(".basket-button");
+const basketBtn = document.querySelector(".basket-button");
 const basketDiv = document.querySelector(".basket");
-myBusketBtn.addEventListener("click", () => {
-  container.innerHTML = "";
+const table = document.querySelector(".responsive-table");
+console.log(table);
+
+basketBtn.addEventListener("click", () => {
+  container.style["display"] = "none";
+  basketDiv.style["display"] = "block";
   basket.map((item) => {
-    let product = "";
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].id === item.id) {
-        product = data[i];
-      }
-    }
-    console.log(product);
-    const card = document.createElement("div");
-    card.setAttribute("class", "basket-card");
+    const product = data.find(dataItem => dataItem.id == item.id);
+    console.log(product.title)
 
-    const imgWrapper = document.createElement("div");
-    imgWrapper.setAttribute("class", "basket-img-wparrer");
-    const img = document.createElement("img");
-    img.setAttribute("src", product.image);
-    imgWrapper.append(img);
-    card.append(imgWrapper);
+    const tableRow = document.createElement("li");
+    tableRow.setAttribute("class", "table-row");
+    tableRow.setAttribute("id", item.id);
 
-    const title = document.createElement("div");
-    title.setAttribute("class", "title");
+    const titleDiv = document.createElement("div");
+    titleDiv.setAttribute("data-label", "Product");
+    titleDiv.setAttribute("class", "col col-1");
+    titleDiv.textContent = product.title;
+    tableRow.append(titleDiv);
 
-    productName = document.createElement("div");
-    productName.setAttribute("class", "product-title");
-    productName.textContent = product.title;
-    title.append(productName);
+    const priceDiv = document.createElement("div");
+    priceDiv.setAttribute("data-label", "Price");
+    priceDiv.setAttribute("class", "col col-2");
+    priceDiv.textContent =`${product.price} $`;
+    tableRow.append(priceDiv);
 
-    const cancelButton = document.createElement("button");
-    cancelButton.setAttribute("class", "cancel");
-    cancelButton.textContent = "cancel";
-    title.append(cancelButton);
-    card.append(title);
+    const countDiv = document.createElement("div");
+    countDiv.setAttribute("data-label", "Count");
+    countDiv.setAttribute("class", "col col-3");
+    countDiv.textContent = item.count;
+    tableRow.append(countDiv);
 
-    const buyDiv = document.createElement("div");
-
-    const productPrice = document.createElement("div");
-    productPrice.setAttribute("class", "basket-prise");
-    productPrice.textContent = `Price: ${product.price}`;
-    buyDiv.append(productPrice);
-
-    const count = document.createElement("div");
-    count.setAttribute("class", "count");
-    count.textContent = item.count;
-    buyDiv.append(count);
-
-    const buyBtn = document.createElement("button");
-    buyBtn.setAttribute("class", "buy");
+    const buyBtn = document.createElement("div");
+    buyBtn.setAttribute("data-label", "buy");
+    buyBtn.setAttribute("class", "col col-4  buy-btn");
     buyBtn.textContent = "buy";
-    buyDiv.append(buyBtn);
-    card.append(buyDiv);
+    buyBtn.addEventListener("click", () => {
+      basket.splice(basket.indexOf(item), 1);
+      alert(`You Bought ${item.count} ${product.title}.`);
+      const removingRow = document.getElementById(item.id);
+      removingRow.style["display"] = "none";
+    });
+    tableRow.append(buyBtn);
 
-    basketDiv.append(card);
+    const cancelBtn = document.createElement("div");
+    cancelBtn.setAttribute("data-label", "cancel");
+    cancelBtn.setAttribute("class", "col col-5 cancel-btn");
+    cancelBtn.textContent = "cancel";
+    cancelBtn.addEventListener("click", () => {
+      basket.splice(basket.indexOf(item), 1);
+      alert(`${product.title} removed from your basket.`);
+      const removingRow = document.getElementById(item.id);
+      removingRow.style["display"] = "none";
+    });
+    tableRow.append(cancelBtn);
+
+    table.append(tableRow);
+
   });
 });
