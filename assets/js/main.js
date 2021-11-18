@@ -207,12 +207,10 @@ for (let i = 0; i < data.length; i++) {
   img.setAttribute("src", data[i].image);
   imgWrapper.append(img);
   imgContainer.append(imgWrapper);
-  card.append(imgContainer);
 
   const title = document.createElement("h2");
   title.setAttribute("class", "product-name");
   title.textContent = data[i].title;
-  card.append(title);
 
   const price = document.createElement("h3");
   if (data[i].stock) {
@@ -221,7 +219,7 @@ for (let i = 0; i < data.length; i++) {
     price.setAttribute("class", "price-sold-out");
   }
   price.textContent = `Price: ${data[i].price} $`;
-  card.append(price);
+  card.append(imgContainer , title, price);
 
   if (data[i].stock) {
     const saleBox = document.createElement("div");
@@ -261,10 +259,7 @@ for (let i = 0; i < data.length; i++) {
       }
     });
 
-    firstCol.append(minusSpan);
-    firstCol.append(countContainer);
-    firstCol.append(plusSpan);
-    saleBox.append(firstCol);
+    firstCol.append(minusSpan, countContainer,plusSpan);
 
     const addBtn = document.createElement("button");
     addBtn.textContent = "add to basket";
@@ -282,9 +277,8 @@ for (let i = 0; i < data.length; i++) {
       }
       alert(`${data[i].title} added to your successfully`);
       countContainer.textContent = 1;
-      console.log(basket);
     });
-    saleBox.append(addBtn);
+    saleBox.append(firstCol, addBtn);
     card.append(saleBox);
   } else {
     const soldOut = document.createElement("div");
@@ -296,11 +290,12 @@ for (let i = 0; i < data.length; i++) {
 }
 
 const headerTitle = document.querySelector("title");
-console.log(headerTitle)
 const basketBtn = document.querySelector(".basket-button");
 const basketDiv = document.querySelector(".basket");
 const message = document.querySelector(".message-container");
 const table = document.querySelector(".responsive-table");
+const totalSpan = document.querySelector(".total");
+let total = 0;
 
 function emptyBasket() {
   if(basket.length>0) {
@@ -320,7 +315,10 @@ basketBtn.addEventListener("click", () => {
 
   basket.map((item) => {
     const product = data.find((dataItem) => dataItem.id == item.id);
-    console.log(product.title);
+    
+    totalAmoundForProduct = item.count * product.price;
+
+    total += totalAmoundForProduct;
 
     const tableRow = document.createElement("li");
     tableRow.setAttribute("class", "table-row");
@@ -335,7 +333,7 @@ basketBtn.addEventListener("click", () => {
     const priceDiv = document.createElement("div");
     priceDiv.setAttribute("data-label", "Price");
     priceDiv.setAttribute("class", "col col-2");
-    priceDiv.textContent = `${product.price} $`;
+    priceDiv.textContent = `${product.price * item.count} $`;
     tableRow.append(priceDiv);
 
     const countDiv = document.createElement("div");
@@ -371,6 +369,9 @@ basketBtn.addEventListener("click", () => {
     tableRow.append(cancelBtn);
 
     table.append(tableRow);
+
+    totalSpan.textContent = total;
+
   });
 
   emptyBasket();
