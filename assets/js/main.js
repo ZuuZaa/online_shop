@@ -314,6 +314,7 @@ basketBtn.addEventListener("click", () => {
 
 
   basket.map((item) => {
+    total = 0;
     const product = data.find((dataItem) => dataItem.id == item.id);
     
     totalAmoundForProduct = item.count * product.price;
@@ -360,10 +361,13 @@ basketBtn.addEventListener("click", () => {
     cancelBtn.setAttribute("class", "col col-5 cancel-btn");
     cancelBtn.textContent = "cancel";
     cancelBtn.addEventListener("click", () => {
+      console.log(basket)
       basket.splice(basket.indexOf(item), 1);
       alert(`${product.title} removed from your basket.`);
+      console.log(tableRow["id"]);
       const removingRow = document.getElementById(item.id);
-      removingRow.style["display"] = "none";
+      console.log(removingRow);
+      removingRow.style.display = "none";
       emptyBasket();
     });
     tableRow.append(cancelBtn);
