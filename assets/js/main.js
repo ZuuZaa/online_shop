@@ -191,103 +191,118 @@ const data = [
 ];
 
 const basket = [];
-
+let count = 1;
 const container = document.querySelector(".product-container");
 
-for (let i = 0; i < data.length; i++) {
-  const card = document.createElement("div");
-  card.setAttribute("class", "card");
+const getData = (attributeClass) => parseInt(document.querySelector(`.${attributeClass}`).textContent);
 
+// Count functions
+const decrease = (count) =>  count > 1 ? --count : alert("You can't order less than one.") || 1;
+const increase = (count) => count < 5 ? ++count: alert("You can't order more than five.") || 5;
+
+// Functions finding product in array of Products or adding product to array
+const addProduct = (id) => {
+  const product = basket.find(item => item.id === id);
+  if (product) product.count = count;
+  else basket.push({ id, count, });
+  count = 1;
+}
+
+const cardImage = (item) => {
   const imgContainer = document.createElement("div");
   imgContainer.setAttribute("class", "img-container");
-
   const imgWrapper = document.createElement("div");
   imgWrapper.setAttribute("class", "img-wparrer");
   const img = document.createElement("img");
-  img.setAttribute("src", data[i].image);
+  img.setAttribute("src", item.image);
   imgWrapper.append(img);
   imgContainer.append(imgWrapper);
+  return imgContainer;
+}
 
+const cardTitle = (item) => {
   const title = document.createElement("h2");
   title.setAttribute("class", "product-name");
-  title.textContent = data[i].title;
-
-  const price = document.createElement("h3");
-  if (data[i].stock) {
-    price.setAttribute("class", "price");
-  } else {
-    price.setAttribute("class", "price-sold-out");
-  }
-  price.textContent = `Price: ${data[i].price} $`;
-  card.append(imgContainer , title, price);
-
-  if (data[i].stock) {
-    const saleBox = document.createElement("div");
-    saleBox.setAttribute("class", "sale");
-
-    const firstCol = document.createElement("div");
-    firstCol.setAttribute("class", "col");
-
-    const secondCol = document.createElement("div");
-    secondCol.setAttribute("class", "col");
-
-    const countContainer = document.createElement("span");
-    countContainer.textContent = 1;
-    let count = parseInt(countContainer.textContent);
-
-    const minusSpan = document.createElement("button");
-    minusSpan.setAttribute("class", "count-button");
-    minusSpan.textContent = "-";
-    minusSpan.addEventListener("click", function (e) {
-      if (count > 1) {
-        count -= 1;
-        countContainer.textContent = count;
-      } else {
-        alert("You can't order less than one.");
-      }
-    });
-
-    const plusSpan = document.createElement("button");
-    plusSpan.setAttribute("class", "count-button");
-    plusSpan.textContent = "+";
-    plusSpan.addEventListener("click", function (e) {
-      if (count < 10) {
-        count += 1;
-        countContainer.textContent = count;
-      } else {
-        alert("This Product has been alredy sold out.");
-      }
-    });
-
-    firstCol.append(minusSpan, countContainer,plusSpan);
-
-    const addBtn = document.createElement("button");
-    addBtn.textContent = "add to basket";
-    addBtn.setAttribute("class", "add-button");
-    addBtn.setAttribute("id", data[i].id);
-    addBtn.addEventListener("click", function (e) {
-      const product = basket.find((item) => item.id === e.target.id);
-      if (product) {
-        product.count = count;
-      } else {
-        basket.push({
-          id: e.target.id,
-          count,
-        });
-      }
-      alert(`${data[i].title} added to your successfully`);
-      countContainer.textContent = 1;
-    });
-    saleBox.append(firstCol, addBtn);
-    card.append(saleBox);
-  } else {
-    const soldOut = document.createElement("div");
-    soldOut.setAttribute("class", "sold-out");
-    soldOut.textContent = "Sold Out";
-    card.append(soldOut);
-  }
-  container.append(card);
+  title.textContent = item.title;
+  return title;
 }
+
+const priceBox = (item) => {
+  const priceBox = document.createElement("h3");
+  if (item.stock) {
+    priceBox.setAttribute("class", "price");
+  } else {
+    priceBox.setAttribute("class", "price-sold-out");
+  }
+  priceBox.textContent = `Price: ${item.price} $`;
+  return priceBox; 
+}
+
+const soldOut = () => {
+  const soldOut = document.createElement("div");
+  soldOut.setAttribute("class", "sold-out");
+  soldOut.textContent = "Sold Out";
+  return soldOut;
+}
+
+const countContainer = () => {
+  const countBox = document.createElement("div");
+  countBox.setAttribute("class", "count-container");
+  // Count Span
+  const countSpan = document.createElement("span");
+  countSpan.setAttribute("class", "count-number");
+  countSpan.textContent = 1;
+  // Decrease Button
+  const minusSpan = document.createElement("button");
+  minusSpan.setAttribute("class", "count-button");
+  minusSpan.textContent = "-";
+  minusSpan.addEventListener("click", () => {
+    count = decrease(count);
+    countSpan.textContent = count;
+  });
+  // Increase Button
+  const plusSpan = document.createElement("button");
+  plusSpan.setAttribute("class", "count-button");
+  plusSpan.textContent = "+";
+  plusSpan.addEventListener("click", () => {
+    count = increase(count);
+    countSpan.textContent = count;
+  });
+  countBox.append(minusSpan, countSpan,plusSpan);
+  return countBox;
+}
+
+const addToBasketBtn = (item) => {
+  const countSpan = document.querySelector('.count-number');
+  const addBtn = document.createElement("button");
+  addBtn.textContent = "add to basket";
+  addBtn.setAttribute("class", "add-button");
+  addBtn.addEventListener("click", () => {
+    addProduct(item.id);
+    alert(`${item.title} added to your successfully`);
+  });
+  return addBtn;
+}
+
+const cardCreater = (item) => {
+  const card = document.createElement("div");
+  card.setAttribute("class", "card");
+  const image = cardImage(item);
+  const title = cardTitle(item);
+  const price = priceBox(item);
+  card.append(image, title, price);
+  if(item.stock) {
+    const countBox = countContainer();
+    const addBtn = addToBasketBtn(item);
+    card.append(countBox, addBtn);
+  }else card.append(soldOut());
+  return card;
+}
+
+
+data.map( item => container.append(cardCreater(item)));
+
+
 
 const headerTitle = document.querySelector("title");
 const basketBtn = document.querySelector(".basket-button");
@@ -382,10 +397,4 @@ basketBtn.addEventListener("click", () => {
 
 });
 
-const logo = document.querySelector(".logo");
-logo.addEventListener("click", () =>{
-  container.style["display"] = "grid";
-  basketDiv.style["display"] = "none";
-  message.style["display"] = "none";
-  headerTitle.textContent = "My Shop | Products";
-})
+
