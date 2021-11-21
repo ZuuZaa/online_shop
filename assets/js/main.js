@@ -369,10 +369,25 @@ const buyBtn = (item, product) => {
   });
   return btn;
 }
+const cancelBtn = (item, product) => {
+  const btn = document.createElement("div");
+  btn.setAttribute("data-label", "cancel");
+  btn.setAttribute("class", "col col-5 cancel-btn");
+  btn.textContent = "cancel";
+  btn.addEventListener("click", () => {
+    basket.splice(basket.indexOf(item), 1);
+    alert(`${product.title} removed from your basket.`);
+    totalAmount("remove", item.count, product.price);
+    emptyBasket();
+  });
+  return btn;
+}
 
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
+  basket.innerHTML = ' <div class="total-amound">Total Amound: <span class="total"></span></div><ul class="responsive-table"><li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li></ul>'
+
   total = 0;
   emptyBasket();
 
@@ -390,31 +405,14 @@ basketBtn.addEventListener("click", () => {
     const price = basketItemPrice(item.count, product.price);
     const count = basketItemCount(item.count);
     const buy = buyBtn(item, product);
-    tableRow.append(title, price, count, buy);
-
-    const cancelBtn = document.createElement("div");
-    cancelBtn.setAttribute("data-label", "cancel");
-    cancelBtn.setAttribute("class", "col col-5 cancel-btn");
-    cancelBtn.textContent = "cancel";
-    cancelBtn.addEventListener("click", () => {
-      console.log(basket)
-      basket.splice(basket.indexOf(item), 1);
-      alert(`${product.title} removed from your basket.`);
-      console.log(tableRow["id"]);
-      const removingRow = document.getElementById(item.id);
-      console.log(removingRow);
-      removingRow.style.display = "none";
-      emptyBasket();
-    });
-    tableRow.append(cancelBtn);
+    const cancel = cancelBtn(item, product);
+    tableRow.append(title, price, count, buy,cancel);
 
     table.append(tableRow);
 
     totalSpan.textContent = total;
 
   });
-
-  
 
 });
 
