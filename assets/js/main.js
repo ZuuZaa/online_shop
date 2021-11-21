@@ -194,8 +194,6 @@ const basket = [];
 let count = 1;
 const container = document.querySelector(".product-container");
 
-const getData = (attributeClass) => parseInt(document.querySelector(`.${attributeClass}`).textContent);
-
 // Count functions
 const decrease = (count) =>  count > 1 ? --count : alert("You can't order less than one.") || 1;
 const increase = (count) => count < 5 ? ++count: alert("You can't order more than five.") || 5;
@@ -273,7 +271,6 @@ const countContainer = () => {
 }
 
 const addToBasketBtn = (item) => {
-  const countSpan = document.querySelector('.count-number');
   const addBtn = document.createElement("button");
   addBtn.textContent = "add to basket";
   addBtn.setAttribute("class", "add-button");
@@ -312,64 +309,88 @@ const table = document.querySelector(".responsive-table");
 const totalSpan = document.querySelector(".total");
 let total = 0;
 
-function emptyBasket() {
+const emptyBasket = () =>{
   if(basket.length>0) {
     basketDiv.style["display"] = "block";
     message.style["display"] = "none";
   }else{
     basketDiv.style["display"] = "none";
     message.style["display"] = "flex";
+    return;
   }
+}
+
+const totalAmount = (operation, count, price) => {
+  const totalAmountForProduct = count * price;
+  console.log("product amount: " + totalAmountForProduct)
+  switch(operation){
+    case "add":
+      total += totalAmountForProduct;
+      break;
+    case "remove":
+      total -= totalAmountForProduct;
+      break;
+  }
+  totalSpan.textContent = total;
+  console.log("total", total);
+}
+
+const basketItemTitle = (title) => {
+  const titleDiv = document.createElement("div");
+  titleDiv.setAttribute("data-label", "Product");
+  titleDiv.setAttribute("class", "col col-1");
+  titleDiv.textContent = title;
+  return titleDiv;
+}
+const basketItemPrice = (count, price) => {
+  const priceDiv = document.createElement("div");
+  priceDiv.setAttribute("data-label", "Price");
+  priceDiv.setAttribute("class", "col col-2");
+  priceDiv.textContent = `${price * count} $`;
+  return priceDiv;
+}
+const basketItemCount = (count) => {
+  const countDiv = document.createElement("div");
+  countDiv.setAttribute("data-label", "Count");
+  countDiv.setAttribute("class", "col col-3");
+  countDiv.textContent = count;
+  return countDiv;
+}
+const buyBtn = (item, product) => {
+  const btn = document.createElement("div");
+  btn.setAttribute("data-label", "buy");
+  btn.setAttribute("class", "col col-4  buy-btn");
+  btn.textContent = "buy";
+  btn.addEventListener("click", () => {
+    basket.splice(basket.indexOf(item), 1);
+    alert(`You Bought ${item.count} ${product.title}.`);
+    totalAmount("remove", item.count, product.price);
+    emptyBasket();
+  });
+  return btn;
 }
 
 basketBtn.addEventListener("click", () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
-  table.innerHTML = '<li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li>'
-
+  total = 0;
+  emptyBasket();
 
   basket.map((item) => {
-    total = 0;
+    
     const product = data.find((dataItem) => dataItem.id == item.id);
     
-    totalAmoundForProduct = item.count * product.price;
-
-    total += totalAmoundForProduct;
+    totalAmount("add",item.count,product.price);
 
     const tableRow = document.createElement("li");
     tableRow.setAttribute("class", "table-row");
     tableRow.setAttribute("id", item.id);
 
-    const titleDiv = document.createElement("div");
-    titleDiv.setAttribute("data-label", "Product");
-    titleDiv.setAttribute("class", "col col-1");
-    titleDiv.textContent = product.title;
-    tableRow.append(titleDiv);
-
-    const priceDiv = document.createElement("div");
-    priceDiv.setAttribute("data-label", "Price");
-    priceDiv.setAttribute("class", "col col-2");
-    priceDiv.textContent = `${product.price * item.count} $`;
-    tableRow.append(priceDiv);
-
-    const countDiv = document.createElement("div");
-    countDiv.setAttribute("data-label", "Count");
-    countDiv.setAttribute("class", "col col-3");
-    countDiv.textContent = item.count;
-    tableRow.append(countDiv);
-
-    const buyBtn = document.createElement("div");
-    buyBtn.setAttribute("data-label", "buy");
-    buyBtn.setAttribute("class", "col col-4  buy-btn");
-    buyBtn.textContent = "buy";
-    buyBtn.addEventListener("click", () => {
-      basket.splice(basket.indexOf(item), 1);
-      alert(`You Bought ${item.count} ${product.title}.`);
-      const removingRow = document.getElementById(item.id);
-      removingRow.style["display"] = "none";
-      emptyBasket();
-    });
-    tableRow.append(buyBtn);
+    const title = basketItemTitle(product.title);    
+    const price = basketItemPrice(item.count, product.price);
+    const count = basketItemCount(item.count);
+    const buy = buyBtn(item, product);
+    tableRow.append(title, price, count, buy);
 
     const cancelBtn = document.createElement("div");
     cancelBtn.setAttribute("data-label", "cancel");
@@ -393,7 +414,7 @@ basketBtn.addEventListener("click", () => {
 
   });
 
-  emptyBasket();
+  
 
 });
 
