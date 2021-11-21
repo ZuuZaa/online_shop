@@ -45,7 +45,7 @@ hr {
 .basket-button {
   color: var(--light_orange);
   font-size: 1.5rem;
-  padding: 0.5rem 5rem;
+  padding: 0.5rem;
   border-radius: 0.2rem;
   border: 0.2px solid var(--border);
   box-shadow: 0 4px 8px 0 var(--shadow);
@@ -76,6 +76,9 @@ hr {
     gap: 1rem;
     padding: 2rem;
   }
+  .basket-button {
+    padding: 0.5rem 5rem;
+  }
 }
 @media (min-width: 1255px) {
   .product-container {
@@ -83,6 +86,9 @@ hr {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     padding: 3rem;
+  }
+  .basket-button {
+    padding: 0.5rem 5rem;
   }
 }
 /* ------- Products -------- */
@@ -300,6 +306,8 @@ hr {
 @media (max-width: 767px) {
   .message {
     font-size: 1rem;
+    margin: 2rem;
+    padding: 1rem;
   }
 }
 
