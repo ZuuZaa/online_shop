@@ -354,16 +354,23 @@ const basketItemCount = (count) => {
   countDiv.textContent = count;
   return countDiv;
 }
+const deleteBasketItem = (item, product) => {
+  basket.splice(basket.indexOf(item), 1);
+  const deletingTableRow = document.getElementById(item.id);
+  console.log(deletingTableRow);
+  deletingTableRow.style.display = "none";
+  totalAmount("remove", item.count, product.price);
+  emptyBasket();
+}
+
 const buyBtn = (item, product) => {
   const btn = document.createElement("div");
   btn.setAttribute("data-label", "buy");
   btn.setAttribute("class", "col col-4  buy-btn");
   btn.textContent = "buy";
   btn.addEventListener("click", () => {
-    basket.splice(basket.indexOf(item), 1);
     alert(`You Bought ${item.count} ${product.title}.`);
-    totalAmount("remove", item.count, product.price);
-    emptyBasket();
+    deleteBasketItem(item, product);
   });
   return btn;
 }
@@ -373,10 +380,8 @@ const cancelBtn = (item, product) => {
   btn.setAttribute("class", "col col-5 cancel-btn");
   btn.textContent = "cancel";
   btn.addEventListener("click", () => {
-    basket.splice(basket.indexOf(item), 1);
     alert(`${product.title} removed from your basket.`);
-    totalAmount("remove", item.count, product.price);
-    emptyBasket();
+    deleteBasketItem(item, product);
   });
   return btn;
 }
