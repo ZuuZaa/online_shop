@@ -298,6 +298,7 @@ const addToBasketBtn = (item) => {
   return addBtn;
 }
 
+// Creating card for product
 const cardCreater = (item) => {
   const card = document.createElement("div");
   card.setAttribute("class", "card");
@@ -314,6 +315,8 @@ const cardCreater = (item) => {
 }
 
 // -------- Basket Part -------------
+
+// If basket is empty function
 const emptyBasket = () =>{
   if(basket.length>0) {
     basketDiv.style["display"] = "block";
@@ -325,6 +328,7 @@ const emptyBasket = () =>{
   }
 }
 
+// Calculating Total Amount
 const totalAmount = (operation, count, price) => {
   const totalAmountForProduct = count * price;
   console.log("count:", count, "price:", price);
@@ -343,6 +347,7 @@ const totalAmount = (operation, count, price) => {
   console.log("total", total);
 }
 
+// Remove tabble row from table
 const deleteBasketItem = (item, product) => {
   basket.splice(basket.indexOf(item), 1);
   const deletingTableRow = document.getElementById(item.id);
@@ -351,6 +356,7 @@ const deleteBasketItem = (item, product) => {
   emptyBasket();
 }
 
+// Product Name for baket table row
 const basketItemTitle = (title) => {
   const titleDiv = document.createElement("div");
   titleDiv.setAttribute("data-label", "Product");
@@ -358,7 +364,7 @@ const basketItemTitle = (title) => {
   titleDiv.textContent = title;
   return titleDiv;
 }
-
+// Product price for baket table row
 const basketItemPrice = (count, price) => {
   const priceDiv = document.createElement("div");
   priceDiv.setAttribute("data-label", "Price");
@@ -366,7 +372,7 @@ const basketItemPrice = (count, price) => {
   priceDiv.textContent = `${price * count} $`;
   return priceDiv;
 }
-
+// Product quantity for baket table row
 const basketItemCount = (count) => {
   const countDiv = document.createElement("div");
   countDiv.setAttribute("data-label", "Count");
@@ -374,7 +380,7 @@ const basketItemCount = (count) => {
   countDiv.textContent = count;
   return countDiv;
 }
-
+// Buy Button for baket table row
 const buyBtn = (item, product) => {
   const btn = document.createElement("div");
   btn.setAttribute("data-label", "buy");
@@ -386,7 +392,7 @@ const buyBtn = (item, product) => {
   });
   return btn;
 }
-
+// Cansel Button for baket table row
 const cancelBtn = (item, product) => {
   const btn = document.createElement("div");
   btn.setAttribute("data-label", "cancel");
@@ -399,6 +405,7 @@ const cancelBtn = (item, product) => {
   return btn;
 }
 
+// Table Creating Functions 
 const basketTableRender = () => {
   emptyBasket();
   basket.map((item) => {
@@ -416,16 +423,19 @@ const basketTableRender = () => {
     table.append(tableRow);
   });
 }
+
+// Container display none 
 const clearContainer = () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
   total = 0;
 }
-
+// Basket items rendering
 basketBtn.addEventListener("click", () => {
   clearContainer();
   basketTableRender();
 });
 
+// Creating card for each item from data source
 data.map( item => container.append(cardCreater(item)));
 
