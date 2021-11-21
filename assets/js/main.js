@@ -216,6 +216,7 @@ const addProduct = (id) => {
   count = 1;
 }
 
+// Image for Product Card
 const cardImage = (item) => {
   const imgContainer = document.createElement("div");
   imgContainer.setAttribute("class", "img-container");
@@ -228,6 +229,7 @@ const cardImage = (item) => {
   return imgContainer;
 }
 
+// Product Name for Product Card
 const cardTitle = (item) => {
   const title = document.createElement("h2");
   title.setAttribute("class", "product-name");
@@ -235,6 +237,7 @@ const cardTitle = (item) => {
   return title;
 }
 
+// Procudt Price for Product Card
 const priceBox = (item) => {
   const priceBox = document.createElement("h3");
   if (item.stock) {
@@ -246,6 +249,7 @@ const priceBox = (item) => {
   return priceBox; 
 }
 
+// For Stock false Products
 const soldOut = () => {
   const soldOut = document.createElement("div");
   soldOut.setAttribute("class", "sold-out");
@@ -253,6 +257,7 @@ const soldOut = () => {
   return soldOut;
 }
 
+// Count Buttons for Product Card
 const countContainer = () => {
   const countBox = document.createElement("div");
   countBox.setAttribute("class", "count-container");
@@ -280,12 +285,14 @@ const countContainer = () => {
   return countBox;
 }
 
+// Add Button for Product Card
 const addToBasketBtn = (item) => {
   const addBtn = document.createElement("button");
   addBtn.textContent = "add to basket";
   addBtn.setAttribute("class", "add-button");
-  addBtn.addEventListener("click", () => {
+  addBtn.addEventListener("click", (event) => {
     addProduct(item.id);
+    console.log(event.parentNode);
     alert(`${item.title} added to your basket successfully`);
   });
   return addBtn;
@@ -311,7 +318,6 @@ const emptyBasket = () =>{
   if(basket.length>0) {
     basketDiv.style["display"] = "block";
     message.style["display"] = "none";
-    //basketTableRender();
   }else{
     basketDiv.style["display"] = "none";
     message.style["display"] = "flex";
@@ -321,18 +327,30 @@ const emptyBasket = () =>{
 
 const totalAmount = (operation, count, price) => {
   const totalAmountForProduct = count * price;
+  console.log("count:", count, "price:", price);
   console.log("product amount: " + totalAmountForProduct)
   switch(operation){
     case "add":
       total = total + totalAmountForProduct;
+      console.log("add")
       break;
     case "remove":
       total = total -totalAmountForProduct;
+      console.log("remove")
       break;
   }
   totalSpan.textContent = total;
   console.log("total", total);
 }
+
+const deleteBasketItem = (item, product) => {
+  basket.splice(basket.indexOf(item), 1);
+  const deletingTableRow = document.getElementById(item.id);
+  deletingTableRow.style.display = "none";
+  totalAmount("remove", item.count, product.price);
+  emptyBasket();
+}
+
 const basketItemTitle = (title) => {
   const titleDiv = document.createElement("div");
   titleDiv.setAttribute("data-label", "Product");
@@ -340,6 +358,7 @@ const basketItemTitle = (title) => {
   titleDiv.textContent = title;
   return titleDiv;
 }
+
 const basketItemPrice = (count, price) => {
   const priceDiv = document.createElement("div");
   priceDiv.setAttribute("data-label", "Price");
@@ -347,20 +366,13 @@ const basketItemPrice = (count, price) => {
   priceDiv.textContent = `${price * count} $`;
   return priceDiv;
 }
+
 const basketItemCount = (count) => {
   const countDiv = document.createElement("div");
   countDiv.setAttribute("data-label", "Count");
   countDiv.setAttribute("class", "col col-3");
   countDiv.textContent = count;
   return countDiv;
-}
-const deleteBasketItem = (item, product) => {
-  basket.splice(basket.indexOf(item), 1);
-  const deletingTableRow = document.getElementById(item.id);
-  console.log(deletingTableRow);
-  deletingTableRow.style.display = "none";
-  totalAmount("remove", item.count, product.price);
-  emptyBasket();
 }
 
 const buyBtn = (item, product) => {
@@ -369,11 +381,12 @@ const buyBtn = (item, product) => {
   btn.setAttribute("class", "col col-4  buy-btn");
   btn.textContent = "buy";
   btn.addEventListener("click", () => {
-    alert(`You Bought ${item.count} ${product.title}.`);
+    alert(`You Bought ${item.count} of ${product.title}.`);
     deleteBasketItem(item, product);
   });
   return btn;
 }
+
 const cancelBtn = (item, product) => {
   const btn = document.createElement("div");
   btn.setAttribute("data-label", "cancel");
@@ -387,7 +400,7 @@ const cancelBtn = (item, product) => {
 }
 
 const basketTableRender = () => {
-  table.innerHTML = '<li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li></ul>'
+  emptyBasket();
   basket.map((item) => {
     const product = data.find((dataItem) => dataItem.id == item.id);
     totalAmount("add",item.count,product.price);
@@ -403,14 +416,15 @@ const basketTableRender = () => {
     table.append(tableRow);
   });
 }
-
-basketBtn.addEventListener("click", () => {
+const clearContainer = () => {
   container.style["display"] = "none";
   headerTitle.textContent = "My Shop | Basket";
   total = 0;
-  emptyBasket();
+}
+
+basketBtn.addEventListener("click", () => {
+  clearContainer();
   basketTableRender();
-  totalSpan.textContent = total;
 });
 
 data.map( item => container.append(cardCreater(item)));
