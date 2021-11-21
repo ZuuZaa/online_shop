@@ -313,6 +313,7 @@ const emptyBasket = () =>{
   if(basket.length>0) {
     basketDiv.style["display"] = "block";
     message.style["display"] = "none";
+    basketTableRender();
   }else{
     basketDiv.style["display"] = "none";
     message.style["display"] = "flex";
@@ -334,7 +335,6 @@ const totalAmount = (operation, count, price) => {
   totalSpan.textContent = total;
   console.log("total", total);
 }
-
 const basketItemTitle = (title) => {
   const titleDiv = document.createElement("div");
   titleDiv.setAttribute("data-label", "Product");
@@ -383,18 +383,13 @@ const cancelBtn = (item, product) => {
   return btn;
 }
 
-basketBtn.addEventListener("click", () => {
-  container.style["display"] = "none";
-  headerTitle.textContent = "My Shop | Basket";
-  basket.innerHTML = ' <div class="total-amound">Total Amound: <span class="total"></span></div><ul class="responsive-table"><li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li></ul>'
+const basketTableRender = () => {
 
-  total = 0;
-  emptyBasket();
+  table.innerHTML = '<li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li></ul>'
 
   basket.map((item) => {
     
     const product = data.find((dataItem) => dataItem.id == item.id);
-    
     totalAmount("add",item.count,product.price);
 
     const tableRow = document.createElement("li");
@@ -407,13 +402,16 @@ basketBtn.addEventListener("click", () => {
     const buy = buyBtn(item, product);
     const cancel = cancelBtn(item, product);
     tableRow.append(title, price, count, buy,cancel);
-
     table.append(tableRow);
-
-    totalSpan.textContent = total;
-
   });
+}
 
+basketBtn.addEventListener("click", () => {
+  container.style["display"] = "none";
+  headerTitle.textContent = "My Shop | Basket";
+  total = 0;
+  emptyBasket();
+  totalSpan.textContent = total;
 });
 
 
