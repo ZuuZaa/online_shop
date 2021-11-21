@@ -190,9 +190,19 @@ const data = [
   },
 ];
 
+const container = document.querySelector(".product-container");
+const headerTitle = document.querySelector("title");
+const basketBtn = document.querySelector(".basket-button");
+const basketDiv = document.querySelector(".basket");
+const message = document.querySelector(".message-container");
+const table = document.querySelector(".responsive-table");
+const totalSpan = document.querySelector(".total");
 const basket = [];
 let count = 1;
-const container = document.querySelector(".product-container");
+let total = 0;
+
+
+// --------- Main Page --------- 
 
 // Count functions
 const decrease = (count) =>  count > 1 ? --count : alert("You can't order less than one.") || 1;
@@ -276,7 +286,7 @@ const addToBasketBtn = (item) => {
   addBtn.setAttribute("class", "add-button");
   addBtn.addEventListener("click", () => {
     addProduct(item.id);
-    alert(`${item.title} added to your successfully`);
+    alert(`${item.title} added to your basket successfully`);
   });
   return addBtn;
 }
@@ -296,24 +306,12 @@ const cardCreater = (item) => {
   return card;
 }
 
-
-data.map( item => container.append(cardCreater(item)));
-
-
-
-const headerTitle = document.querySelector("title");
-const basketBtn = document.querySelector(".basket-button");
-const basketDiv = document.querySelector(".basket");
-const message = document.querySelector(".message-container");
-const table = document.querySelector(".responsive-table");
-const totalSpan = document.querySelector(".total");
-let total = 0;
-
+// -------- Basket Part -------------
 const emptyBasket = () =>{
   if(basket.length>0) {
     basketDiv.style["display"] = "block";
     message.style["display"] = "none";
-    basketTableRender();
+    //basketTableRender();
   }else{
     basketDiv.style["display"] = "none";
     message.style["display"] = "flex";
@@ -326,10 +324,10 @@ const totalAmount = (operation, count, price) => {
   console.log("product amount: " + totalAmountForProduct)
   switch(operation){
     case "add":
-      total += totalAmountForProduct;
+      total = total + totalAmountForProduct;
       break;
     case "remove":
-      total -= totalAmountForProduct;
+      total = total -totalAmountForProduct;
       break;
   }
   totalSpan.textContent = total;
@@ -384,18 +382,13 @@ const cancelBtn = (item, product) => {
 }
 
 const basketTableRender = () => {
-
   table.innerHTML = '<li class="table-header"><div class="col col-1">Product</div><div class="col col-2">Price</div><div class="col col-3">Count</div><div class="col col-4">buy</div><div class="col col-5">cancel</div></li></ul>'
-
   basket.map((item) => {
-    
     const product = data.find((dataItem) => dataItem.id == item.id);
     totalAmount("add",item.count,product.price);
-
     const tableRow = document.createElement("li");
     tableRow.setAttribute("class", "table-row");
     tableRow.setAttribute("id", item.id);
-
     const title = basketItemTitle(product.title);    
     const price = basketItemPrice(item.count, product.price);
     const count = basketItemCount(item.count);
@@ -411,7 +404,9 @@ basketBtn.addEventListener("click", () => {
   headerTitle.textContent = "My Shop | Basket";
   total = 0;
   emptyBasket();
+  basketTableRender();
   totalSpan.textContent = total;
 });
 
+data.map( item => container.append(cardCreater(item)));
 
